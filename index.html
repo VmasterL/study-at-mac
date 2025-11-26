@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Study@Mac</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+</head>
+
+
+<body>
+    <!-- BOTTOM NAV BAR -->
+    <nav class="bottom-nav">
+        <button class="nav-item nav-active" data-tab="home">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </button>
+
+        <button class="nav-item" data-tab="favorites">
+            <span class="nav-icon">⭐</span>
+            <span class="nav-label">Favorites</span>
+        </button>
+
+        <button class="nav-item" data-tab="visited">
+            <span class="nav-icon">🕓</span>
+            <span class="nav-label">Visited</span>
+        </button>
+
+        <button class="nav-item" data-tab="profile">
+            <span class="nav-icon">👤</span>
+            <span class="nav-label">Profile</span>
+        </button>
+    </nav>
+
+    <div class="app-shell">
+
+        <!-- HEADER -->
+        <header class="app-header">
+            <h1 class="app-title">Study@Mac</h1>
+            <p class="app-subtitle">Study spaces made easy</p>
+        </header>
+
+        <!-- SEARCH + FILTERS -->
+        <section class="search-section">
+            <div class="search-bar">
+                <input id="search-input" type="text" placeholder="Search Mills, Thode, MUSC..." />
+            </div>
+
+            <div class="filters-sort-row">
+                <div class="filter-bar-inline">
+                    <span class="chip" data-tag="quiet">Quiet</span>
+                    <span class="chip" data-tag="near-food">Near Food</span>
+                    <span class="chip" data-tag="group">Group</span>
+                    <span class="chip" data-tag="outlets">Outlets</span>
+                </div>
+
+                <button id="sort-toggle" class="sort-text-button">Sort ▾</button>
+
+                <div id="sort-dropdown" class="sort-dropdown hidden">
+                    <div class="sort-option" data-sort="recommended">Recommended</div>
+                    <div class="sort-option" data-sort="rating-desc">Highest Rated</div>
+                    <div class="sort-option" data-sort="name-asc">A–Z</div>
+                    <div class="sort-option" data-sort="crowdedness-asc">Least Crowded</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MAIN CONTENT -->
+        <main class="app-main">
+
+            <!-- HOME -->
+            <section id="tab-home" class="tab-panel tab-panel--active">
+                <h2 class="section-title">Popular on Campus</h2>
+                <div id="place-list"></div>
+            </section>
+
+            <!-- FAVORITES -->
+            <section id="tab-favorites" class="tab-panel">
+                <h2 class="section-title">Favorites</h2>
+                <p id="favorites-empty" class="placeholder-text">No favorites yet.</p>
+                <div id="favorites-list"></div>
+            </section>
+
+            <!-- VISITED -->
+            <section id="tab-visited" class="tab-panel">
+                <h2 class="section-title">Visited</h2>
+                <p id="visited-empty" class="placeholder-text">Nothing visited yet.</p>
+                <div id="visited-list"></div>
+            </section>
+
+            <!-- PROFILE -->
+            <section id="tab-profile" class="tab-panel">
+                <h2 class="section-title">Your Profile</h2>
+                <p>This prototype demonstrates filtering, reviews, favorites, visited tracking, and search.</p>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- DETAILS MODAL -->
+    <div class="modal-overlay hidden" id="details-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title"></h2>
+                <button id="modal-close" class="close-btn">×</button>
+            </div>
+
+            <div class="modal-content">
+                <div id="visit-note" class="modal-info-tag hidden">Reviews count as a visit</div>
+
+                <p id="modal-location"></p>
+
+                <p><strong id="modal-rating-value"></strong> (<span id="modal-rating-count"></span> reviews)</p>
+
+                <h3>Amenities</h3>
+                <ul id="modal-amenities"></ul>
+
+                <h3>Reviews</h3>
+                <div id="modal-reviews"></div>
+
+                <button id="modal-favorite-btn" class="secondary-btn" style="margin-top: 16px;">
+                    ☆ Add to Favorites
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast"></div>
+
+</body>
+
+</html>
