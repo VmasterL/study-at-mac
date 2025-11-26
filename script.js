@@ -338,9 +338,15 @@ function createPlaceCard(place) {
         </div>
   
         <button class="primary-btn" data-action="details">Details</button>
+
         <button class="secondary-btn" data-action="favorite">
-          ${isFav ? "★ Favorited" : "☆ Favorite"}
+        ${isFav ? "★ Favorited" : "☆ Favorite"}
         </button>
+
+        <button class="secondary-btn" data-action="visited">
+        ${state.visited.includes(place.id) ? "✓ Visited" : "Mark Visited"}
+        </button>
+
       </div>
     `;
     return card;
@@ -426,7 +432,7 @@ function openModal(id) {
 
     // Update modal favorite button state
     const favBtn = document.getElementById("modal-favorite-btn");
-    if (favBtn) {
+    if (state.favorites.includes(id)) {
         favBtn.textContent = "★ Favorited";
     } else {
         favBtn.textContent = "☆ Add to Favorites";
@@ -445,6 +451,7 @@ function openModal(id) {
 function closeModal() {
     document.getElementById("details-modal").classList.add("hidden");
     document.getElementById("visit-note").classList.add("hidden");
+    document.getElementById("review-form").classList.add("hidden");
 }
 
 function renderModalReviews(id) {
@@ -542,6 +549,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (action === "details") openModal(id);
         if (action === "favorite") toggleFavorite(id);
+
+        if (action === "visited") {
+            if (!state.visited.includes(id)) {
+                state.visited.push(id);
+                showToast("Marked as visited");
+            } else {
+                state.visited = state.visited.filter(x => x !== id);
+                showToast("Removed from visited");
+            }
+
+            saveState();
+            renderVisited();
+            renderHome();
+            renderFavorites();
+        }
+
     }
 
     document.getElementById("place-list").addEventListener("click", handleCardClick);
@@ -597,8 +620,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             sortDropdown.classList.add("hidden");
             sortOpen = false;
-
-            renderHome();
         });
     });
 
@@ -629,5 +650,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Open review form button
+    const openReviewBtn = document.getElementById("open-review-form");
+    if (openReviewBtn) {
+        openReviewBtn.addEventListener("click", () => {
+            document.getElementById("review-form").classList.remove("hidden");
+        });
+    }
+
+    // Submit review
+    const reviewForm = document.getElementById("review-form");
+    if (reviewForm) {
+        reviewForm.addEventListener("submit", submitReview);
+    }
 
 });

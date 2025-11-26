@@ -123,6 +123,38 @@
                 <button id="modal-favorite-btn" class="secondary-btn" style="margin-top: 16px;">
                     ☆ Add to Favorites
                 </button>
+                <button id="open-review-form" class="primary-btn" style="margin-top: 12px;">
+                    Write a Review
+                </button>
+
+
+                <h3>Leave a Review</h3>
+                <form id="review-form" class="review-form hidden">
+                    <label>
+                        Rating:
+                        <select id="review-rating">
+                            <option value="">Select...</option>
+                            <option value="5">5 ★</option>
+                            <option value="4">4 ★</option>
+                            <option value="3">3 ★</option>
+                            <option value="2">2 ★</option>
+                            <option value="1">1 ★</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Review:
+                        <textarea id="review-text" rows="3"></textarea>
+                    </label>
+
+                    <label>
+                        Your Name (optional):
+                        <input id="review-author" />
+                    </label>
+
+                    <button type="submit" class="primary-btn">Submit Review</button>
+                </form>
+
             </div>
         </div>
 
