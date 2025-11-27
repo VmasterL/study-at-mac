@@ -466,8 +466,10 @@ function getVisibleFavorites() {
             return a.name.localeCompare(b.name);
         }
 
-        // 4. RECOMMENDED — RANDOM ORDER
-        return Math.random() - 0.5;
+        // 4. RECOMMENDED — By Rating
+        const ra = getRating(a.id).avg;
+        const rb = getRating(b.id).avg;
+        return rb - ra;
     });
 
 
