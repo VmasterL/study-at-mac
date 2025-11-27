@@ -11,10 +11,35 @@
  ******************************************************/
 
 // ================ DATA =================
+// ================ EVENTS TODAY =================
+const EVENTS_TODAY = [
+    {
+        id: "event-grind-coffee",
+        title: "Free Coffee at The Grind",
+        time: "10:00-11:00 AM",
+        description: "Grab a free small coffee when you show up with a study buddy.",
+        placeId: "the_grind_musc"
+    },
+    {
+        id: "event-burke-hotdogs",
+        title: "Hotdogs in the Park @ Burke Field",
+        time: "12:00-2:00 PM",
+        description: "Free hotdogs and snacks while you study or hang out on the grass.",
+        placeId: "burke_field"
+    },
+    {
+        id: "event-mills-donate",
+        title: "Donate a Book at Mills",
+        time: "All Day",
+        description: "Drop off an old textbook or novel and swap it for something new.",
+        placeId: "mills"
+    }
+];
+
 const PLACES = [
     {
         id: "mills",
-        name: "Mills Library – Silent Study Zone",
+        name: "Mills Library",
         building: "Mills",
         area: "Central Campus",
         noise: "quiet",
@@ -29,7 +54,7 @@ const PLACES = [
     },
     {
         id: "thode",
-        name: "Thode Library – Basement",
+        name: "Thode Library",
         building: "Thode",
         area: "West Campus",
         noise: "moderate",
@@ -44,7 +69,7 @@ const PLACES = [
     },
     {
         id: "musc",
-        name: "MUSC – 2nd Floor Lounge",
+        name: "MUSC - 2nd Floor Lounge",
         building: "MUSC",
         area: "Central Campus",
         noise: "lively",
@@ -59,9 +84,9 @@ const PLACES = [
     },
     {
         id: "innis_library",
-        name: "Innis Library",
+        name: "CLOSED: Innis Library",
         building: "Kenneth Taylor Hall (KTH)",
-        area: "Central Campus",
+        area: "Under Renovation, Central Campus",
         type: "library",
         noise: "quiet",
         crowdedness: "low",
@@ -69,7 +94,7 @@ const PLACES = [
         imgClass: "img-innis",
         locationText: "KTH | Main Floor",
         amenities: [
-            "Quiet environment",
+            "Excited for this to reopen",
             "Individual study desks",
             "Business student hub"
         ],
@@ -111,7 +136,7 @@ const PLACES = [
     },
     {
         id: "starbucks_musc",
-        name: "Starbucks – MUSC",
+        name: "Starbucks - MUSC",
         building: "MUSC",
         area: "Central Campus",
         type: "cafe",
@@ -159,7 +184,7 @@ const PLACES = [
     },
     {
         id: "secondcup_pgcll",
-        name: "Second Cup – PGCLL",
+        name: "Second Cup - PGCLL",
         building: "PGCLL",
         area: "North Campus",
         type: "cafe",
@@ -188,10 +213,71 @@ const PLACES = [
         seedReviews: [
             { rating: 3, text: "Busy but lots of space.", author: "Nursing Student" }
         ]
+    },
+    {
+        id: "burke_field",
+        name: "Burke Field",
+        building: "Burke Science Building (BSB)",
+        area: "Central Campus",
+        type: "outdoor",
+        noise: "moderate",
+        crowdedness: "medium",
+        tags: ["outdoor", "bright", "group"],
+        imgClass: "img-burke",
+        locationText: "In front of BSB, large open green field",
+        amenities: [
+            "Large open outdoor space",
+            "Great for group study circles",
+            "Open air and fresh light"
+        ],
+        seedReviews: [
+            { rating: 4, text: "Amazing spot on warm days, lots of space.", author: "Science Student" }
+        ]
+    },
+    {
+        id: "arts_quad",
+        name: "Arts Quad",
+        building: "Arts Side Campus",
+        area: "Central Campus",
+        type: "outdoor",
+        noise: "moderate",
+        crowdedness: "high",
+        tags: ["outdoor", "near-food", "bright"],
+        imgClass: "img-artsquad",
+        locationText: "Central courtyard by MUSC, BSB, and TSH",
+        amenities: [
+            "Benches and open grass area",
+            "Near MUSC food options",
+            "Good for casual studying"
+        ],
+        seedReviews: [
+            { rating: 3, text: "Nice atmosphere but can get busy.", author: "Humanities Student" }
+        ]
+    },
+    {
+        id: "itb_outdoor",
+        name: "ITB Outdoor Seating",
+        building: "Information Technology Building (ITB)",
+        area: "West Campus",
+        type: "outdoor",
+        noise: "quiet",
+        crowdedness: "low",
+        tags: ["outdoor", "quiet", "bright"],
+        imgClass: "img-itb",
+        locationText: "Outdoor seating area beside ITB's main entrance",
+        amenities: [
+            "Shaded benches",
+            "Low foot traffic",
+            "Great for quiet solo study"
+        ],
+        seedReviews: [
+            { rating: 5, text: "One of the quietest outdoor spots on campus.", author: "Engineering Student" }
+        ]
     }
 ];
 
 const placeMap = PLACES.reduce((m, p) => (m[p.id] = p, m), {});
+let filterQuietNow = false;
 
 // ================ STATE =================
 const STATE_KEY = "studyspot_v1";
@@ -235,10 +321,45 @@ function getRating(id) {
     return { avg: sum / rev.length, count: rev.length };
 }
 
+function generateFakeBusyness(place) {
+    // base crowdedness influences probability
+    const base = place.crowdedness;
+
+    let quietChance = {
+        low: 0.8,
+        medium: 0.5,
+        high: 0.2
+    }[base] || 0.5;
+
+    return Math.random() < quietChance ? "quiet" : "busy";
+}
+
+function getLiveCrowdednessScore(place) {
+    const liveMap = { quiet: 0, busy: 2 }; // live busyness weight
+    const staticMap = { low: 0, medium: 1, high: 2 }; // fallback
+
+    const live = liveMap[place.liveBusy] ?? 1;
+    const stat = staticMap[place.crowdedness] ?? 1;
+
+    // live busyness matters MORE than static
+    return live * 2 + stat;
+}
+
+// Add live busy-level to all places
+PLACES.forEach(p => p.liveBusy = generateFakeBusyness(p));
+
 // ================ RENDERING =================
 let searchQuery = "";
 let activeTags = new Set();
 let sortOption = "recommended";
+
+function liveSortValue(place) {
+    const live = place.liveBusy === "quiet" ? 0 : 1;  // quiet ALWAYS first
+    const staticMap = { low: 0, medium: 1, high: 2 };
+    const stat = staticMap[place.crowdedness] ?? 1;
+
+    return live * 10 + stat;
+}
 
 // Filter + sort the places
 function getVisiblePlaces() {
@@ -259,19 +380,37 @@ function getVisiblePlaces() {
         );
     }
 
-    list.sort((a, b) => {
-        const ra = getRating(a.id).avg;
-        const rb = getRating(b.id).avg;
+    if (filterQuietNow) {
+        list = list.filter(p => p.liveBusy === "quiet");
+    }
 
-        if (sortOption === "rating-desc") return rb - ra;
-        if (sortOption === "name-asc") return a.name.localeCompare(b.name);
+    list.sort((a, b) => {
+
+        // 1. LEAST CROWDED MODE
         if (sortOption === "crowdedness-asc") {
+            const liveA = a.liveBusy === "quiet" ? 0 : 1;
+            const liveB = b.liveBusy === "quiet" ? 0 : 1;
+
+            if (liveA !== liveB) return liveA - liveB;
+
             const order = { low: 0, medium: 1, high: 2 };
             return order[a.crowdedness] - order[b.crowdedness];
         }
 
-        // recommended = highest rating
-        return rb - ra;
+        // 2. RATING (highest first)
+        if (sortOption === "rating-desc") {
+            const ra = getRating(a.id).avg;
+            const rb = getRating(b.id).avg;
+            return rb - ra;
+        }
+
+        // 3. NAME A–Z
+        if (sortOption === "name-asc") {
+            return a.name.localeCompare(b.name);
+        }
+
+        // 4. RECOMMENDED — RANDOM ORDER
+        return Math.random() - 0.5;
     });
 
 
@@ -298,18 +437,41 @@ function getVisibleFavorites() {
         );
     }
 
-    list.sort((a, b) => {
-        const ra = getRating(a.id).avg;
-        const rb = getRating(b.id).avg;
+    if (filterQuietNow) {
+        list = list.filter(p => p.liveBusy === "quiet");
+    }
 
-        if (sortOption === "rating-desc") return rb - ra;
-        if (sortOption === "name-asc") return a.name.localeCompare(b.name);
+    list.sort((a, b) => {
+
+        // 1. LEAST CROWDED MODE
         if (sortOption === "crowdedness-asc") {
+            const liveA = a.liveBusy === "quiet" ? 0 : 1;
+            const liveB = b.liveBusy === "quiet" ? 0 : 1;
+
+            if (liveA !== liveB) return liveA - liveB;
+
             const order = { low: 0, medium: 1, high: 2 };
             return order[a.crowdedness] - order[b.crowdedness];
         }
-        return rb - ra; // recommended
+
+        // 2. RATING (highest first)
+        if (sortOption === "rating-desc") {
+            const ra = getRating(a.id).avg;
+            const rb = getRating(b.id).avg;
+            return rb - ra;
+        }
+
+        // 3. NAME A–Z
+        if (sortOption === "name-asc") {
+            return a.name.localeCompare(b.name);
+        }
+
+        // 4. RECOMMENDED — RANDOM ORDER
+        return Math.random() - 0.5;
     });
+
+
+
 
     return list;
 }
@@ -324,6 +486,11 @@ function createPlaceCard(place) {
     card.className = "place-card";
     card.dataset.placeId = place.id;
 
+    let busyLabel = {
+        quiet: "🟢Quiet Now",
+        busy: "🔴Busy Now"
+    }[place.liveBusy];
+
     card.innerHTML = `
       <div class="place-image ${place.imgClass}"></div>
       <div class="place-body">
@@ -331,6 +498,8 @@ function createPlaceCard(place) {
           <h3>${place.name}</h3>
           <span class="place-rating">${avg.toFixed(1)}★</span>
         </div>
+        <div class="live-busy">${busyLabel}</div>
+
         <p>${place.building} | ${place.area}</p>
   
         <div style="margin:6px 0;">
@@ -350,6 +519,32 @@ function createPlaceCard(place) {
       </div>
     `;
     return card;
+}
+
+function renderEvents() {
+    const c = document.getElementById("events-list");
+    if (!c) return;
+
+    c.innerHTML = "";
+
+    EVENTS_TODAY.forEach(ev => {
+        const div = document.createElement("div");
+        div.className = "visited-card event-card";
+        div.dataset.placeId = ev.placeId; // so our click handler can open the modal
+
+        div.innerHTML = `
+            <div class="visited-card-title">${ev.title}</div>
+            <div class="visited-meta">
+                🕒 ${ev.time}
+                &nbsp;•&nbsp;
+                Linked to: <strong>${placeMap[ev.placeId].name}</strong>
+            </div>
+            <p style="margin: 4px 0 8px 0;">${ev.description}</p>
+            <button class="secondary-btn" data-action="details">View Place</button>
+        `;
+
+        c.appendChild(div);
+    });
 }
 
 function renderHome() {
@@ -438,13 +633,6 @@ function openModal(id) {
         favBtn.textContent = "☆ Add to Favorites";
     }
 
-    // Mark visited
-    if (!state.visited.includes(id)) {
-        state.visited.push(id);
-        saveState();
-        renderVisited();
-    }
-
     document.getElementById("details-modal").classList.remove("hidden");
 }
 
@@ -468,7 +656,7 @@ function renderModalReviews(id) {
         const div = document.createElement("div");
         div.className = "review-card";
         div.innerHTML = `
-        <p><strong>${review.rating}★</strong> — ${review.text}</p>
+        <p><strong>${review.rating}★</strong> - ${review.text}</p>
         <p><em>${review.author}</em></p>
       `;
         container.appendChild(div);
@@ -497,7 +685,7 @@ function submitReview(e) {
     renderModalReviews(currentPlaceId);
     renderHome();
     renderFavorites();
-    showToast("Review added — this spot is now in your Visited list");
+    showToast("Review added - this spot is now in your Visited list");
 }
 
 // ================ FAVORITES =================
@@ -520,6 +708,18 @@ document.addEventListener("DOMContentLoaded", () => {
     renderHome();
     renderFavorites();
     renderVisited();
+    renderEvents();
+
+    const quietChip = document.getElementById("chip-quiet-now");
+
+    if (quietChip) {
+        quietChip.addEventListener("click", () => {
+            filterQuietNow = !filterQuietNow;
+            quietChip.classList.toggle("chip--active");
+            renderHome();
+            renderFavorites();
+        });
+    }
 
     // TAB switching
     document.querySelectorAll(".nav-item").forEach(item => {
@@ -570,6 +770,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("place-list").addEventListener("click", handleCardClick);
     document.getElementById("favorites-list").addEventListener("click", handleCardClick);
     document.getElementById("visited-list").addEventListener("click", handleCardClick);
+    document.getElementById("events-list").addEventListener("click", handleCardClick);
 
     // Search
     document.getElementById("search-input").addEventListener("input", e => {
@@ -582,7 +783,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Filter chips
     document.querySelectorAll(".chip").forEach(chip => {
         chip.addEventListener("click", () => {
+
+            // Skip the quiet-now chip — handled separately
+            if (chip.id === "chip-quiet-now") return;
+
             const tag = chip.dataset.tag;
+            if (!tag) return; // SAFETY
+
             if (activeTags.has(tag)) {
                 activeTags.delete(tag);
                 chip.classList.remove("chip--active");
@@ -590,6 +797,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 activeTags.add(tag);
                 chip.classList.add("chip--active");
             }
+
             renderHome();
             renderFavorites();
         });

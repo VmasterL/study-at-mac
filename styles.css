@@ -30,10 +30,11 @@ body {
 
 /* APP CONTAINER */
 .app-main {
-    padding-bottom: 80px;
+    padding-bottom: 90px;
 }
 
 .app-shell {
+    padding-bottom: 90px;
     width: 100%;
     max-width: 420px;
     min-height: 100vh;
@@ -261,48 +262,122 @@ body {
     height: 130px;
 }
 
+.live-busy {
+    font-weight: 400;
+    margin: 4px 0 6px;
+    font-size: 0.9rem;
+}
+
 .img-mills {
-    background: linear-gradient(120deg, #7a0000, #b05b5b);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/mills.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-thode {
-    background: linear-gradient(120deg, #004a7a, #5ba1c5);
-}
-
-.img-musc {
-    background: linear-gradient(120deg, #ff9800, #ffb74d);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/thode.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-innis {
-    background: linear-gradient(120deg, #6c5ce7, #a29bfe);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/innis.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.img-musc {
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/musc.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-hsl {
-    background: linear-gradient(120deg, #00b894, #55efc4);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/hsl.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-lyons {
-    background: linear-gradient(120deg, #0984e3, #81ecec);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/lyons.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-starbucks {
-    background: linear-gradient(120deg, #006241, #1abc9c);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/starbucks.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-grind {
-    background: linear-gradient(120deg, #b33939, #e55039);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/grind.jpeg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-fireball {
-    background: linear-gradient(120deg, #d35400, #e67e22);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/fireball.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-secondcup {
-    background: linear-gradient(120deg, #795548, #a1887f);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/secondcup.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .img-iahs {
-    background: linear-gradient(120deg, #2d3436, #636e72);
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/iahs.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.img-burke {
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/burke.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.img-artsquad {
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/artsquad.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.img-itb {
+    background:
+        linear-gradient(0deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.1)),
+        url("images/itb.jpg");
+    background-size: cover;
+    background-position: center;
 }
 
 .place-body {
@@ -465,6 +540,17 @@ body {
     font-size: 18px;
     color: var(--mac-maroon);
     padding-right: 16px;
+}
+
+#modal-amenities {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+#modal-amenities li {
+    margin: 4px 0;
+    padding-left: 0;
 }
 
 .close-btn {

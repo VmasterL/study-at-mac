@@ -28,9 +28,9 @@
             <span class="nav-label">Visited</span>
         </button>
 
-        <button class="nav-item" data-tab="profile">
-            <span class="nav-icon">👤</span>
-            <span class="nav-label">Profile</span>
+        <button class="nav-item" data-tab="events">
+            <span class="nav-icon">📅</span>
+            <span class="nav-label">Events</span>
         </button>
     </nav>
 
@@ -50,10 +50,11 @@
 
             <div class="filters-sort-row">
                 <div class="filter-bar-inline">
-                    <span class="chip" data-tag="quiet">Quiet</span>
+                    <span class="chip" id="chip-quiet-now">Quiet Now</span>
                     <span class="chip" data-tag="near-food">Near Food</span>
                     <span class="chip" data-tag="group">Group</span>
                     <span class="chip" data-tag="outlets">Outlets</span>
+                    <span class="chip" data-tag="outdoor">Outdoor</span>
                 </div>
 
                 <button id="sort-toggle" class="sort-text-button">Sort ▾</button>
@@ -61,7 +62,7 @@
                 <div id="sort-dropdown" class="sort-dropdown hidden">
                     <div class="sort-option" data-sort="recommended">Recommended</div>
                     <div class="sort-option" data-sort="rating-desc">Highest Rated</div>
-                    <div class="sort-option" data-sort="name-asc">A–Z</div>
+                    <div class="sort-option" data-sort="name-asc">A-Z</div>
                     <div class="sort-option" data-sort="crowdedness-asc">Least Crowded</div>
                 </div>
             </div>
@@ -90,10 +91,11 @@
                 <div id="visited-list"></div>
             </section>
 
-            <!-- PROFILE -->
-            <section id="tab-profile" class="tab-panel">
-                <h2 class="section-title">Your Profile</h2>
-                <p>This prototype demonstrates filtering, reviews, favorites, visited tracking, and search.</p>
+            <!-- EVENTS TODAY -->
+            <section id="tab-events" class="tab-panel">
+                <h2 class="section-title">Events Today</h2>
+                <p class="placeholder-text">Campus happenings connected to your study spots.</p>
+                <div id="events-list"></div>
             </section>
 
         </main>
@@ -104,7 +106,7 @@
         <div class="modal">
             <div class="modal-header">
                 <h2 id="modal-title"></h2>
-                <button id="modal-close" class="close-btn">×</button>
+                <button id="modal-close" class="close-btn">X</button>
             </div>
 
             <div class="modal-content">
