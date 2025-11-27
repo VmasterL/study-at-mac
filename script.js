@@ -386,31 +386,26 @@ function getVisiblePlaces() {
 
     list.sort((a, b) => {
 
-        // 1. LEAST CROWDED MODE
         if (sortOption === "crowdedness-asc") {
             const liveA = a.liveBusy === "quiet" ? 0 : 1;
             const liveB = b.liveBusy === "quiet" ? 0 : 1;
 
+            // quiet first
             if (liveA !== liveB) return liveA - liveB;
 
+            // then static crowdedness
             const order = { low: 0, medium: 1, high: 2 };
             return order[a.crowdedness] - order[b.crowdedness];
         }
 
-        // 2. RATING (highest first)
-        if (sortOption === "rating-desc") {
-            const ra = getRating(a.id).avg;
-            const rb = getRating(b.id).avg;
-            return rb - ra;
-        }
+        const ra = getRating(a.id).avg;
+        const rb = getRating(b.id).avg;
 
-        // 3. NAME A–Z
-        if (sortOption === "name-asc") {
-            return a.name.localeCompare(b.name);
-        }
+        if (sortOption === "rating-desc") return rb - ra;
+        if (sortOption === "name-asc") return a.name.localeCompare(b.name);
 
-        // 4. RECOMMENDED — RANDOM ORDER
-        return Math.random() - 0.5;
+        // default recommended = highest rating
+        return rb - ra;
     });
 
 
@@ -443,34 +438,28 @@ function getVisibleFavorites() {
 
     list.sort((a, b) => {
 
-        // 1. LEAST CROWDED MODE
         if (sortOption === "crowdedness-asc") {
             const liveA = a.liveBusy === "quiet" ? 0 : 1;
             const liveB = b.liveBusy === "quiet" ? 0 : 1;
 
+            // quiet first
             if (liveA !== liveB) return liveA - liveB;
 
+            // then static crowdedness
             const order = { low: 0, medium: 1, high: 2 };
             return order[a.crowdedness] - order[b.crowdedness];
         }
 
-        // 2. RATING (highest first)
-        if (sortOption === "rating-desc") {
-            const ra = getRating(a.id).avg;
-            const rb = getRating(b.id).avg;
-            return rb - ra;
-        }
-
-        // 3. NAME A–Z
-        if (sortOption === "name-asc") {
-            return a.name.localeCompare(b.name);
-        }
-
-        // 4. RECOMMENDED — By Rating
         const ra = getRating(a.id).avg;
         const rb = getRating(b.id).avg;
+
+        if (sortOption === "rating-desc") return rb - ra;
+        if (sortOption === "name-asc") return a.name.localeCompare(b.name);
+
+        // default recommended = highest rating
         return rb - ra;
     });
+
 
 
 
