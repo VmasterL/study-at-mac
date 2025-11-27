@@ -22,7 +22,7 @@ const EVENTS_TODAY = [
     },
     {
         id: "event-burke-hotdogs",
-        title: "Hotdogs in the Park @ Burke Field",
+        title: "Hotdogs in the Park at Burke Field",
         time: "12:00-2:00 PM",
         description: "Free hotdogs and snacks while you study or hang out on the grass.",
         placeId: "burke_field"
@@ -492,12 +492,15 @@ function createPlaceCard(place) {
     }[place.liveBusy];
 
     card.innerHTML = `
-      <div class="place-image ${place.imgClass}"></div>
-      <div class="place-body">
-        <div class="place-header-row">
-          <h3>${place.name}</h3>
-          <span class="place-rating">${avg.toFixed(1)}★</span>
+        <div class="details-click-zone" data-action="details">
+            <div class="place-image ${place.imgClass}"></div>
+
+            <div class="place-header-row">
+                <h3 class="place-title">${place.name}</h3>
+                <span class="place-rating">${avg.toFixed(1)}★</span>
+            </div>
         </div>
+
         <div class="live-busy">${busyLabel}</div>
 
         <p>${place.building} | ${place.area}</p>
@@ -533,7 +536,12 @@ function renderEvents() {
         div.dataset.placeId = ev.placeId; // so our click handler can open the modal
 
         div.innerHTML = `
-            <div class="visited-card-title">${ev.title}</div>
+            <div class="visited-card-title details-click-zone"
+                data-action="details"
+                data-place-id="${ev.placeId}">
+                ${ev.title}
+            </div>
+   
             <div class="visited-meta">
                 🕒 ${ev.time}
                 &nbsp;•&nbsp;

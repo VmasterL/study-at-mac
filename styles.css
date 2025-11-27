@@ -620,6 +620,27 @@ body {
     text-align: center;
 }
 
+.visited-card-title.details-click-zone {
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.visited-card-title.details-click-zone:hover {
+    opacity: 0.85;
+}
+
+
+/* Details */
+.details-click-zone {
+    cursor: pointer;
+}
+
+.details-click-zone:hover {
+    opacity: 0.92;
+    transition: 0.1s ease;
+}
+
 
 /* TOAST */
 #toast {
